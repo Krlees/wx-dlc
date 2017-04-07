@@ -1,0 +1,15 @@
+{
+    "require": {
+        "overtrue/wechat": "^3.2",
+        "catfan/Medoo": "^1.2",
+        "symfony/http-foundation": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "files": [
+            "app/helpers.php"
+        ]
+    }
+}
