@@ -37,8 +37,8 @@ function to_guid_string($mix) {
  * @param $parameters array
  * @return string
  */
-function get_sign($parameters,$appkey) {
-    $parameters['appkey'] = $appkey;
+function create_sign($parameters) {
+
     // 签名步骤一：按字典序排序参数
     ksort($parameters);
     $buff = $query = '';
@@ -50,23 +50,8 @@ function get_sign($parameters,$appkey) {
     }
 
     // 签名步骤二：sha1加密
-    $result = sha1($string);
+    $result = sha1($string.'&dls808krlee');
 
-    return $result;
-}
-
-/**
- * 生成用户唯一令牌
- * @param $appid     
- * @param $appkey
- * @param $username
- * @param $pwd
- * @param $role
- * @return string
- */
-function get_token($appid,$appkey,$username,$pwd, $role=1) {
-    $salt = create_randomstr();
-    $result = md5( md5($appid . $appkey . $role)  . $username . $salt . $pwd);
     return $result;
 }
 
@@ -93,14 +78,6 @@ function random($length, $chars = '0123456789') {
         $hash .= $chars[mt_rand(0, $max)];
     }
     return $hash;
-}
-
-/***
- * 生成唯一编号
- * @return <string>
- */
-function unique_sn() {
-    return date('ymd').random(6);
 }
 
 /**
@@ -157,22 +134,6 @@ function set_setting($classify, $key, $value) {
     return ($affected===false) ? false : true;
 }
 
-/**
- * 接口错误日志
- * @param string $message 内容
- * @return bool
- */
-function error_logs($code=0,$message=''){
-
-//    $b = $GLOBALS['db']->insert('api_error_log',[
-//        'code'     => $code,
-//        'message'  => $message,
-//        'add_time' => NOW_TIME,
-//    ]);
-
-//    return $b ? true : false;
-}
-
 function dd($data)
 {
     echo "<pre>";
@@ -181,34 +142,6 @@ function dd($data)
     exit;
 }
 
-/**
- * 微信支付接口日志
- * @param <string> $info 日志内容
- * @param <mixed> $data 记录数据
- */
-function pay_log($info, $data = '') {
-
-    if($data) {
-        if(is_array($data)) {
-            $message = json_encode($data);
-        } else {
-            $message = $data;
-        }
-    }
-    else {
-        $data = '';
-    }
-
-    $GLOBALS['db']->insert('pay_log',[
-        'title'    => $info,
-        'message'  => $data,
-        'add_time' => date('Y-m-d H:i:s'),
-        'add_ip'   => $_SERVER["REMOTE_ADDR"] ? $_SERVER["REMOTE_ADDR"] : 0,
-    ]);
-
-    file_put_contents(ROOT_PATH.'/Cache/logs/wxpay/'.date('Y_m_d').'.log', 'Times: '.date('Y-m-d H:i:s').PHP_EOL.'Info: '.$info.PHP_EOL.'ADD_IP: '.$_SERVER["REMOTE_ADDR"].PHP_EOL.'data: '.$data.PHP_EOL.PHP_EOL,FILE_APPEND);
-
-}
 
 
 /**
@@ -222,6 +155,81 @@ function checkMobileValid($phone)
         return true;
     }else{
         return false;
+    }
+}
+
+/**
+ * 获取数值中的key值
+ *
+ * @param  \ArrayAccess|array  $array
+ * @param  string  $key
+ * @param  mixed   $default
+ * @return mixed
+ */
+function array_get($array, $key, $default = null)
+{
+
+    if (!isset($array[$key])) {
+        if( !is_null($default)){
+            return $default;
+        }
+
+        return null;
+    }
+
+    return $array[$key];
+
+}
+
+/**
+ * cURL请求接口数据 ...
+ * @param $url
+ * @param $data
+ * @return json
+ */
+function curl_do($url,$data = null){
+    $curl = curl_init();
+    // 设置超时
+    curl_setopt($curl, CURLOP_TIMEOUT, 30);
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+    curl_setopt($curl, CURLOPT_HEADER, 0); //不取得返回头信息
+    if (!empty($data)){
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    }
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    $output = curl_exec($curl);
+    curl_close($curl);
+    return $output;
+
+}
+
+/**
+ * [多维数组排序]
+ * @Author: Krlee
+ * @param $array
+ * @param $key
+ * @return null
+ */
+function array_sort($array, $key){
+    if(is_array($array)){
+        $key_array = null;
+        $new_array = null;
+        for( $i = 0; $i < count( $array ); $i++ ){
+            $key_array[$array[$i][$key]] = $i;
+        }
+        ksort($key_array);
+        $j = 0;
+        foreach($key_array as $k => $v){
+            $new_array[$j] = $array[$v];
+            $j++;
+        }
+        unset($key_array);
+        return $new_array;
+    }else{
+        return $array;
     }
 }
 
@@ -277,7 +285,7 @@ function sendSMS($to, $datas, $tpl_key='')
 
             return false;
 
-            //Response::_instance()->callbacl(80001,'短信发送失败',['code'=>$result->statusCode,'message'=>$result->statusMsg]);
+            //Responses::_instance()->callbacl(80001,'短信发送失败',['code'=>$result->statusCode,'message'=>$result->statusMsg]);
         }
         else{
 
@@ -311,27 +319,3 @@ function sendSMS($to, $datas, $tpl_key='')
 }
 
 
-/**
- * cURL请求接口数据 ...
- * @param $url
- * @param $data
- * @return json
- */
-function curl_do($url,$data = null){
-    $curl = curl_init();
-    // 设置超时
-    curl_setopt($curl, CURLOP_TIMEOUT, 30);
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
-    curl_setopt($curl, CURLOPT_HEADER, 0); //不取得返回头信息
-    if (!empty($data)){
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-    }
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    $output = curl_exec($curl);
-    curl_close($curl);
-    return $output;
-
-}

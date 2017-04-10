@@ -1,4 +1,6 @@
 <?php
+namespace App\Cache;
+
 /**
  * MemcacheOperate.php
  *
@@ -11,7 +13,7 @@
  * 2015/6/8, by CleverCode, Create
  *
  */
-class MemcacheOperate extends Memcache{
+class MemcacheOperate extends \Memcache{
     const host = "127.0.0.1";
     const port = 11211;
 
@@ -35,3 +37,4 @@ class MemcacheOperate extends Memcache{
         return self::$_instance;
     }
 }
+

@@ -1,4 +1,5 @@
 <?php
+namespace App\Responses;
 
 /**
  * 定义API抽象类
@@ -20,8 +21,9 @@ abstract class Response
         $type = isset($_GET['format']) ? $_GET['format'] : $type;
         $resultClass = ucwords($type); //首字母大写
         if (is_null(self::$_instance) || isset (self::$_instance)) {
-            require_once($type . '.class.php');
-            self::$_instance = new $resultClass();
+            //require_once $type.'.class.php';
+            $cla = 'App\\Responses\\'.$type;
+            self::$_instance = new $cla();
         }
         return self::$_instance;
 

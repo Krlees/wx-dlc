@@ -1,8 +1,5 @@
 <?php
-/**
-* @author by singwa
-* @date
-*/
+namespace App\Responses;
 
 class Xml extends Response {
 	public function callback($code, $message = '', $data = array()) {

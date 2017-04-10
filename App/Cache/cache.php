@@ -14,7 +14,7 @@
  */
 
 // 加载Memcache
-include_once ('Memcache.php');
+include_once('MemcacheOperate.class.php');
 
 /*
  * 客户端类
