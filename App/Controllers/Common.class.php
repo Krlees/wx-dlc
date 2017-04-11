@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 class Common
 {
     protected $app; // easywechat插件实例化对象
+    protected $token; // 微信access_token
     protected $request;
 
     public function __construct()
@@ -17,11 +18,11 @@ class Common
         $this->request = new Request($_GET, $_POST);
 
         // 检测访问源的合法性
-        $this->__checkSign($this->request);
+        //$this->__checkSign($this->request);
 
         // 获取该公众号的配置
-        $token = $this->request->get('token') or Response::_instance()->callback(1005);
-        $options = MemcacheOperate::getInstance()->get($token);
+        $this->token = $this->request->get('token') or Response::_instance()->callback(1005);
+        $options = MemcacheOperate::getInstance()->get($this->token);
         if (!$options) {
             Response::_instance()->callback(1005);
         }

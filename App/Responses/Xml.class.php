@@ -12,11 +12,11 @@ class Xml extends Response {
 			error_logs($code,$message);
 		}
 
-		$result = array(
-			'code'    => $code,
-			'message' => $message,
-			'data'    => $data
-		);
+        $result = [
+            'errcode' => $code,
+            'errmsg'  => $message,
+            'data'    => $data
+        ];
 
 		header('Content-Type:text/xml');
 		$xml  = "<?xml version='1.0' encoding='UTF-8'?>\n";

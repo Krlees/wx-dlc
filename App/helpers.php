@@ -233,6 +233,15 @@ function array_sort($array, $key){
     }
 }
 
+function JsonToArr($json) {
+    $newJson = json_decode($json,true);
+    if (json_last_error() == JSON_ERROR_NONE){
+        return $json;
+    }
+
+    return $newJson;
+}
+
 
 //**************************************举例说明***********************************************************************
 //*假设您用测试Demo的APP ID，则需使用默认模板ID 1，发送手机号是13800000000，传入参数为6532和5，则调用方式为           *

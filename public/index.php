@@ -12,7 +12,6 @@ require __DIR__ . '/../vendor/autoload.php';
 use Medoo\Medoo;
 use App\Cache\MemcacheOperate;
 
-MemcacheOperate::getInstance()->flush();
 // 判断并缓存配置信息
 try {
     $cache = MemcacheOperate::getInstance();
