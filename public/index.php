@@ -1,13 +1,14 @@
 <?php
-define('APP_PATH', __DIR__ . '/../App');
-define('STORAGE_PATH', __DIR__ . '/../Storage');
+define('ROOT_PATH',__DIR__ . '/..');
+define('APP_PATH', ROOT_PATH.'/App');
+define('STORAGE_PATH', ROOT_PATH . '/Storage');
 define('NOW_TIME', $_SERVER['REQUEST_TIME'] > 0 ? $_SERVER['REQUEST_TIME'] : time());
 define('METHOD', strtolower($_SERVER['REQUEST_METHOD']));
 
 require_once APP_PATH . '/Responses/Response.class.php';
 require_once APP_PATH . '/Cache/MemcacheOperate.class.php';
 
-require __DIR__ . '/../vendor/autoload.php';
+require ROOT_PATH . 'vendor/autoload.php';
 
 use Medoo\Medoo;
 use App\Cache\MemcacheOperate;

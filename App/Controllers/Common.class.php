@@ -51,5 +51,19 @@ class Common
 
     }
 
+    /**
+     * [判断必选参数]
+     * @Author: Krlee
+     *
+     */
+    protected function checkParam(array $parmeters)
+    {
+        foreach ($parmeters as $k=>$v){
+            if(!$v){
+                Response::_instance()->callback(1004);
+            }
+        }
+    }
+
 
 }

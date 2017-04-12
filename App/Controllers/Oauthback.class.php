@@ -3,7 +3,11 @@
 
 namespace App\Controllers;
 
-
+// +----------------------------------------------------------------------
+// | 微信Oauth2.0回调处理
+// +----------------------------------------------------------------------
+// | @Authoer Krlee
+// +----------------------------------------------------------------------
 use App\Cache\MemcacheOperate;
 use App\Responses\Response;
 use EasyWeChat\Foundation\Application;
@@ -18,20 +22,20 @@ class Oauthback
      */
     public function index()
     {
-        var_dump(1);exit;
         $requset = new Request($_GET);
         $token = $requset->get('token') or Response::_instance()->callback(1005);
 
-        $targetUrl = MemcacheOperate::getInstance()->get('target_url_'.$token);
+        $targetUrl = MemcacheOperate::getInstance()->get('target_url_' . $token);
         $options = MemcacheOperate::getInstance()->get($token);
         $app = new Application($options);
 
         $users = $app->oauth->user();
 
 
-        $params = $users->toArray();
-        $targetUrl = $targetUrl.'?'.http_build_query($params);
+        $params = $users->getOriginal();
 
-        header('location:'. $targetUrl);
+        $targetUrl = $targetUrl . '?' . http_build_query($params);
+
+        header('location:' . $targetUrl);
     }
 }

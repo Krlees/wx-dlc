@@ -33,7 +33,7 @@ class Oauth extends Common
         $options = MemcacheOperate::getInstance()->get($token);
         $options['oauth'] = [
             'scopes' => [$type],
-            'callback' => urlencode('http://easywx.krlee.com/OauthBack/index'),
+            'callback' => "http://easywx.krlee.com/OauthBack/index?token=".$token,
         ];
 
         $app = new Application($options);
