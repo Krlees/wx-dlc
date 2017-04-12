@@ -65,5 +65,22 @@ class Common
         }
     }
 
+    /**
+     * [适用于微信结果直接返回列表的情况]
+     * @Author: Krlee
+     *
+     */
+    protected function responseList($result)
+    {
+        if( !isset($result->errcode)){
+            Response::_instance()->callback(0,'',JsonToArr($result));
+        }
+        else {
+            echo $result;
+            exit;
+        }
+
+    }
+
 
 }
