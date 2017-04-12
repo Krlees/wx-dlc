@@ -8,7 +8,7 @@ define('METHOD', strtolower($_SERVER['REQUEST_METHOD']));
 require_once APP_PATH . '/Responses/Response.class.php';
 require_once APP_PATH . '/Cache/MemcacheOperate.class.php';
 
-require ROOT_PATH . 'vendor/autoload.php';
+require ROOT_PATH . '/vendor/autoload.php';
 
 use Medoo\Medoo;
 use App\Cache\MemcacheOperate;

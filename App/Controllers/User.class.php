@@ -55,12 +55,7 @@ class User extends Common
     {
         $nextOpenId = $this->request->get('nextOpenId') or Response::_instance()->callback(1004);
         $result = $this->userService->lists();
-        if (!isset($result->errcode)) {
-            Response::_instance()->callback(0, '', JsonToArr($result));
-        }
-
-        echo $result;
-        exit;
+        $this->responseList($result);
     }
 
     /**

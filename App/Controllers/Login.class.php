@@ -28,10 +28,11 @@ class Login
         $wx_config = [
             'appid'  => 'wxe64ffd96ea5834e8',
             'secret' => 'a95e1dabb2564a763db4875dcaeb1641',
-            'mchid'  => '1261433001',
+            'token' => 'krlee',
+            'aes_key' => '',
             'payment' => [
-                'merchant_id'        => 'your-mch-id',
-                'key'                => 'key-for-signature',
+                'merchant_id'        => '1261433001',
+                'key'                => '',
                 'cert_path'          => 'path/to/your/cert.pem', // XXX: 绝对路径！！！！
                 'key_path'           => 'path/to/your/key',      // XXX: 绝对路径！！！！
                 'notify_url'         => '默认的订单回调地址',       // 你也可以在下单时单独设置来想覆盖它
@@ -62,15 +63,17 @@ class Login
             'aes_key' => $this->wx_config['aes_key'] ?: '', // 可选
             'log' => [
                 'level' => 'debug',
-                'file' => STORAGE_PATH . '/logs/easywechat.log', // XXX: 绝对路径！！！！
+                'permission' => 0777,
+                'file' => STORAGE_PATH . '/logs/easywx/'.date('y-m-d').'.txt', // XXX: 绝对路径！！！！
             ],
 
+
             'payment' => [
-                'merchant_id'        => $this->wx_config['mchid'],
-                'key'                => $this->wx_config['key'],
+                'merchant_id'        => $this->wx_config['payment']['merchant_id'],
+                'key'                => $this->wx_config['payment']['key'],
                 'cert_path'          => ROOT_PATH.'/cert/'.$this->wx_config['appid'].'/cert.pem', // XXX: 绝对路径！！！！
                 'key_path'           => ROOT_PATH.'/cert/'.$this->wx_config['appid'].'/key.pem',  // XXX: 绝对路径！！！！
-                'notify_url'         => $this->wx_config['payment_notify_url'],       // 你也可以在下单时单独设置来想覆盖它
+                'notify_url'         => $this->wx_config['payment']['notify_url'],       // 你也可以在下单时单独设置来想覆盖它
                 // 'device_info'     => '013467007045764',
                 // 'sub_app_id'      => '',
                 // 'sub_merchant_id' => '',

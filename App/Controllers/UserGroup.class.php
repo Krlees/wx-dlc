@@ -27,12 +27,7 @@ class UserGroup extends Common
     {
         $result = $this->group->lists();
 
-        if (!isset($result->errcode)) {
-            Response::_instance()->callback(0, '', JsonToArr($result));
-        }
-
-        echo $result;
-        exit;
+        $this->responseList($result);
     }
 
     public function create()

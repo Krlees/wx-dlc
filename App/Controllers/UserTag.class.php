@@ -21,12 +21,8 @@ class UserTag extends Common
     public function lists()
     {
         $result = $this->userTag->lists();
-        if (!isset($result->errcode)) {
-            Response::_instance()->callback(1004);
-        }
 
-        echo $result;
-        exit;
+        $this->responseList($result);
     }
 
     public function create()
@@ -69,12 +65,8 @@ class UserTag extends Common
         $openId = $this->request->get('open_id') or Response::_instance()->callback(1004);
 
         $result = $this->userTag->userTags($openId);
-        if (!isset($result->errcode)) {
-            Response::_instance()->callback(0, '', JsonToArr($result));
-        }
 
-        echo $result;
-        exit;
+        $this->responseList($result);
     }
 
     /**
@@ -88,12 +80,8 @@ class UserTag extends Common
         $nextOpenId = $this->request->get('nextOpenId');
 
         $result = $this->userTag->usersOfTag($tagId, $nextOpenId);
-        if (!isset($result->errcode)) {
-            Response::_instance()->callback(0, '', JsonToArr($result));
-        }
-
-        echo $result;
-        exit;
+        
+        $this->responseList($result);
     }
 
     /**
