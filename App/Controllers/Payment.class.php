@@ -29,7 +29,7 @@ class Payment extends Common
      * @Author: Krlee
      *
      */
-    public function order()
+    public function wxpay()
     {
         $out_trade_no = $this->request->get('out_trade_no');
         $total_fee = $this->request->get('total_fee');
@@ -60,7 +60,6 @@ class Payment extends Common
         $order = new Order($attributes);
         $result = $this->payment->prepare($order);
         if ($result->return_code == 'SUCCESS' && $result->result_code == 'SUCCESS') {
-            $prepayId = $result->prepay_id;
 
             // 微信支付配置
             $config = $this->payment->configForJSSDKPayment($result->prepay_id);
@@ -70,7 +69,7 @@ class Payment extends Common
                 'chooseWXPay',
             ], true);
 
-            //return view('pay',['js' => $js, 'config'=>$config ]);
+            include '../Views/wxpay.php';
         } else {
             echo $result;
             exit;
